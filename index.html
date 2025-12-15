@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Data. Your Rules.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+    }
+    body {
+      background-color: #050d1f;
+      background-image: radial-gradient(circle at top right, #0b2342 0%, #071326 45%, #030915 100%);
+      color: #cfeeff;
+      overflow-x: hidden;
+    }
+    .page {
+      position: relative;
+      inset: auto;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .hidden {
+      opacity: 0;
+      transform: translateY(40px);
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    /* Landing */
+    .container { max-width: 1100px; text-align: center; }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0, 160, 220, 0.18);
+      color: #66d6ff;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    p.sub {
+      max-width: 640px;
+      margin: 0 auto 40px;
+      font-size: 18px;
+      color: #b6d9ec;
+    }
+    .features {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+    .chip {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(0,160,220,0.12);
+      font-size: 14px;
+      color: #7fdcff;
+    }
+    .cta {
+      padding: 16px 36px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #00bfff, #0084ff);
+      color: #e9f7ff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 18px 40px rgba(0,132,255,0.45);
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      margin-top: 80px;
+      flex-wrap: wrap;
+    }
+    .stat h3 { font-size: 28px; color: #7ad9ff; }
+    .stat span { font-size: 14px; color: #9bbcd0; }
+
+    /* Survey */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(5,15,35,0.75);
+      backdrop-filter: blur(18px);
+      border-radius: 22px;
+      padding: 36px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+    }
+    .card h2 { margin-bottom: 12px; }
+    .card p { color: #bcdff1; margin-bottom: 28px; }
+    label { font-size: 14px; color: #9edcff; }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      margin: 8px 0 22px;
+      outline: none;
+    }
+    .actions {
+      display: flex;
+      gap: 14px;
+    }
+    .secondary {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #cfeeff;
+      cursor: pointer;
+    }
+    .primary {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+      /* Background visuals – hexagons & squares */
+    .bg-shapes::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(60deg, rgba(0,198,255,0.12) 0 1px, transparent 1px 120px),
+        repeating-linear-gradient(-60deg, rgba(0,114,255,0.10) 0 1px, transparent 1px 120px);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .bg-shapes::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 140px 140px;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Smooth reveal */
+    .reveal {
+      max-height: 0;
+      overflow: hidden;
+      transform: translateY(-8px);
+      transition: max-height 0.6s cubic-bezier(.22,.61,.36,1), opacity 0.4s ease, transform 0.4s ease;
+      opacity: 0;
+    }
+    .reveal.show {
+      max-height: 220px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Button visual feedback */
+    button:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="bg-shapes">
+
+  <!-- LANDING PAGE -->
+  <section id="landing" class="page">
+    <div class="container">
+      <div class="badge">Decentralized Protocol</div>
+      <h1>Your Data.<br>Your Rules.</h1>
+      <p class="sub">Reclaim digital sovereignty with next‑generation <strong>zero‑knowledge cryptography</strong>.</p>
+
+      <div class="features">
+        <div class="chip">End‑to‑End Encrypted</div>
+        <div class="chip">Fully Anonymous</div>
+        <div class="chip">Audited & Secure</div>
+      </div>
+
+      <button class="cta" onclick="goToSurvey()">Join Early Access</button>
+
+      <div class="stats">
+        <div class="stat"><h3>10K+</h3><span>Early Adopters</span></div>
+        <div class="stat"><h3>100%</h3><span>Private</span></div>
+        <div class="stat"><h3>$50M</h3><span>Secured</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURVEY PAGE -->
+  <section id="survey" class="page hidden">
+    <div class="card">
+      <h2>Early Access Survey</h2>
+      <p>Enter your details and we’ll notify you first.</p>
+
+      <form>
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" required />
+
+        <label>Preferred Contact Platform</label>
+        <select id="platform" onchange="handlePlatformChange()" style="width:100%;padding:14px 16px;border-radius:12px;border:1px solid rgba(0,180,255,0.25);background:rgba(3,15,35,0.9);color:#cfeeff;margin:8px 0 22px;appearance:none;cursor:pointer;">
+          <option value="">Select a platform</option>
+          <option value="Telegram">Telegram</option>
+          <option value="Twitter">Twitter / X</option>
+          <option value="Discord">Discord</option>
+          <option value="Email">Email</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <div id="handleBox" class="reveal">
+          <label>Your Handle / @</label>
+          <input id="handle" type="text" placeholder="@username" />
+        </div>
+
+        <div id="otherBox" class="reveal">
+          <label>Other Platform</label>
+          <input id="otherPlatform" type="text" placeholder="Platform name" />
+          <label>Your Handle</label>
+          <input id="otherHandle" type="text" placeholder="@username" />
+        </div>
+
+        <div class="actions">
+          <button type="button" class="secondary" onclick="goBack()">Back</button>
+          <button type="submit" class="primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    function goToSurvey() {
+      document.getElementById('landing').classList.add('hidden');
+      document.getElementById('survey').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBack() {
+      document.getElementById('survey').classList.add('hidden');
+      document.getElementById('landing').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handlePlatformChange() {
+      const platform = document.getElementById('platform').value;
+      const handleBox = document.getElementById('handleBox');
+      const otherBox = document.getElementById('otherBox');
+      handleBox.classList.remove('show');
+      otherBox.classList.remove('show');
+      if (platform && platform !== 'Other') handleBox.classList.add('show');
+      if (platform === 'Other') otherBox.classList.add('show');
+    }
+
+    async function sendToTelegram(data) {
+      const BOT_TOKEN = 'YOUR_BOT_TOKEN';
+      const CHAT_ID = 'YOUR_CHAT_ID';
+      const message = `New Early Access Submission:
+Email: ${data.email}
+Platform: ${data.platform}
+Handle: ${data.handle}
+Time: ${data.time}`;
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      });
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.querySelector('input[type=email]').value;
+      const platform = document.getElementById('platform').value;
+      const handle = document.getElementById('handle')?.value || document.getElementById('otherHandle')?.value || '';
+      const time = new Date().toLocaleString();
+      sendToTelegram({ email, platform, handle, time });
+      alert('Submitted successfully');
+    });
+  </script>
+
+</body>
+</html>
